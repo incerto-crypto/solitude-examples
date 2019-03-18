@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pet Shop</title>
+  </head>
+  <body>
+    <div>
+      <ul>
+        {% for pet in pets %}
+        <li>Pet #{{pet.id}} ({{pet.owner}})</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+</html>
