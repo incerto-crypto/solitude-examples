@@ -19,7 +19,7 @@ Create a python3 virtual environment and activate it. Install solitude.
 ```bash
 python3 -mvenv myenv
 source myenv/bin/activate
-pip install git+ssh://git@gitlab.com/cryptostallions/solitude.git
+pip install git+https://github.com/incerto-crypto/solitude.git
 ```
 
 ### Using solitude
