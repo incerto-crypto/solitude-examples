@@ -19,6 +19,7 @@ Note: the shelter owner is the address which deploys the shelter contract.
 Compile the contracts by running
 
 ```bash
+solitude install  # install any needed external tools
 solitude compile
 ```
 

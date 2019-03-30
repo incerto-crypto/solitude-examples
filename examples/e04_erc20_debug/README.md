@@ -12,6 +12,7 @@ Download and compile the contracts by running
 
 ```bash
 ./get_zeppelin_contracts.sh
+solitude install  # install any needed external tools
 solitude compile
 ```
 

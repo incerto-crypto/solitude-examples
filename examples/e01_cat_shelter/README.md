@@ -16,6 +16,7 @@ There are only 16 cats in this shelter: get yours before they're all gone!
 Compile the contracts by running
 
 ```bash
+solitude install  # install any needed external tools
 solitude compile
 ```
 
