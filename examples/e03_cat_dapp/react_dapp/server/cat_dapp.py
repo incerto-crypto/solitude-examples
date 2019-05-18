@@ -3,7 +3,7 @@ import threading
 import json
 from flask import Flask, Response, render_template, send_from_directory
 from solitude import read_config_file, Factory
-from solitude.client import IContractNoCheck, ETHClient
+from solitude.client import ETHClient
 
 app = Flask(__name__)
 HTTP_SERVER_PORT = 8546
@@ -13,13 +13,17 @@ ADOPTER_CAPACITY = 2
 def deploy(client: ETHClient):
     owner = client.address(0)
     with client.account(owner):
-        shelter = client.deploy("CatShelter", args=(), wrapper=IContractNoCheck)
+        shelter = client.deploy("CatShelter", args=())
     return shelter
 
 
 @app.route('/api/v1/contract', methods=['GET'])
 def get_main_contract():
-    return Response(json.dumps({"abi" : app.shelter.abi, "address": app.shelter.address}), mimetype='application/json')
+    return Response(
+        json.dumps({
+            "abi": app.shelter.abi,
+            "address": app.shelter.address}),
+        mimetype='application/json')
 
 
 @app.after_request
@@ -32,7 +36,7 @@ def after_request(response):
 
 def rescue_cats(client: ETHClient, shelter_address):
     owner = client.address(0)
-    shelter = client.use("CatShelter", shelter_address, wrapper=IContractNoCheck)
+    shelter = client.use("CatShelter", shelter_address)
     with client.account(owner):
         for _ in range(10):
             time.sleep(2)
@@ -47,6 +51,7 @@ def main():
     endpoint = server.endpoint
     try:
         client1 = factory.create_client(endpoint=server.endpoint)
+        client1.update_contracts(factory.get_objectlist())
         app.shelter = deploy(client1)
         shelter_address = app.shelter.address
         thread_rescue = threading.Thread(target=rescue_cats, args=(client1, shelter_address))

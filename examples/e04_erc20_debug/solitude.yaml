@@ -1,8 +1,10 @@
-Project.Name: Solitude
+Project.Name: ERC20Debug
+Project.SourceDir: .
+Project.ObjectDir: ./build
 Tools.Directory: ~/.solitude-dev
 Tools.Solc.Version: 0.5.2
 Tools.GanacheCli.Version: 6.4.1
-Tools.Solium.Version: 1.2.3
+Tools.EthLint.Version: 1.2.4
 Tools.Required:
   - Solc
   - GanacheCli
@@ -18,16 +20,24 @@ Server.Accounts:
   - 0x48d73da350f98b1b16ede5fab0078c1ee2c3525483d5365626b4ba3d798686cb, 100 eth
   - 0x669fd08dd8760b47b368153b2d8483c08295a0fa2853684746bf84ea533a611c, 100 eth
   - 0x6d3f46df88ffbaf2c7c5a9567f6c26414fa205ae6ca27312a656115a71dfc9f4, 100 eth
+Server.BlockTime: null
 Server.Host: 127.0.0.1
 Server.GasPrice: 20000000000
 Server.GasLimit: 6721975
-Testing.StartServer: true
-Client.Endpoint: http://localhost:8545
-Client.AccountAliases:
-  attila: 0
-  george: 1
-Client.ContractBuildDir: ./build
-Client.DefaultGas: 1000000
-Compiler.ContractDir: ./
-Compiler.BuildDir: ./build
+Client.Endpoint: http://127.0.0.1:8545
+Client.GasPrice: 20000000000
+Client.GasLimit: 6721975
 Compiler.Optimize: null
+Linter.Plugins:
+  - security
+Linter.Rules:
+  indentation:
+    - error
+    - 4
+  quotes:
+    - error
+    - double
+Testing.RunServer: true
+Testing.PortRange:
+  - 8600
+  - 8700

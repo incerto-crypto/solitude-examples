@@ -1,19 +1,19 @@
 import time
 import threading
 from solitude import read_config_file, Factory
-from solitude.client import IContractNoCheck, ETHClient
+from solitude.client import ETHClient
 
 
 def deploy(client: ETHClient):
     owner = client.address(0)
     with client.account(owner):
-        shop = client.deploy("CatShelter", args=(), wrapper=IContractNoCheck)
+        shop = client.deploy("CatShelter", args=())
     return shop.address
 
 
 def rescue_cats(client: ETHClient, shop_address):
     owner = client.address(0)
-    shop = client.use("CatShelter", shop_address, wrapper=IContractNoCheck)
+    shop = client.use("CatShelter", shop_address)
     with client.account(owner):
         for _ in range(3):
             time.sleep(2)
@@ -23,7 +23,7 @@ def rescue_cats(client: ETHClient, shop_address):
 
 def adopt_cats(client: ETHClient, shop_address):
     adopter = client.address(1)
-    shop = client.use("CatShelter", shop_address, wrapper=IContractNoCheck)
+    shop = client.use("CatShelter", shop_address)
 
     flt = client.add_filter([shop], ["Rescued"])
     def watch_and_adopt():
@@ -45,13 +45,17 @@ def main():
     server = factory.create_server()
     server.start()
     endpoint = server.endpoint
+    compiled_contracts = factory.get_objectlist()
+
     try:
         client1 = factory.create_client(endpoint=server.endpoint)
+        client1.update_contracts(compiled_contracts)
         shop_address = deploy(client1)
         thread_rescue = threading.Thread(target=rescue_cats, args=(client1, shop_address))
         thread_rescue.start()
 
         client2 = factory.create_client(endpoint=server.endpoint)
+        client2.update_contracts(compiled_contracts)
         thread_adopt = threading.Thread(target=adopt_cats, args=(client2, shop_address))
         thread_adopt.start()
 

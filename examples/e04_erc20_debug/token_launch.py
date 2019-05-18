@@ -9,7 +9,7 @@ def print_txinfo(txinfo):
         user=txinfo.txargs["from"]
     ))
     print("   TO {contract}@{address}".format(
-        contract=txinfo.contract,
+        contract=txinfo.contractname,
         address=txinfo.address
     ))
     print("   FUNCTION {name}{args}".format(
@@ -25,6 +25,7 @@ def main():
     server.start()
     try:
         client = factory.create_client()
+        client.update_contracts(factory.get_objectlist())
         owner = client.address(0)
         george = client.address(1)
 
